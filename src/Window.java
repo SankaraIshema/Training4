@@ -18,13 +18,15 @@ public class Window extends JFrame{
 	}
 	
 	private void Go() {
+		//Starting position of our red ball
+		int x = pan.getPosX();
+		int y = pan.getPosY();		
+		
+		//Initialise the booleans
+		Boolean backX = true;
+		Boolean backY = true;
+		
 		while(true) {
-			int x = pan.getPosX();
-			int y = pan.getPosY();		
-			
-			//Initialise the booleans
-			Boolean backX = true;
-			Boolean backY = false;
 			
 			/* When the ball is going forward backX is true 
 			 * When the ball is going backward backX is false */
@@ -38,7 +40,7 @@ public class Window extends JFrame{
 			/* When backX is true the ball is going forward
 			 * When backX is false the ball is going backward 
 			 * Which in both case mean incrementing or decrementing the position*/
-			if(backX == true) {
+			if(backX) {
 				pan.setPosX(++x);
 			}
 			else {
@@ -46,7 +48,7 @@ public class Window extends JFrame{
 			}
 			
 			//Same for backY
-			if(backY == true) {
+			if(backY) {
 				pan.setPosY(++y);
 			}
 			else {
@@ -58,12 +60,12 @@ public class Window extends JFrame{
 			
 			//And we don't forget to slow the process downS
 			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
+				Thread.sleep(3);
+			} 
+			catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
+			}	
 		}
 	}
 }
