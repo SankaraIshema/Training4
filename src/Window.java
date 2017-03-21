@@ -1,18 +1,26 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Window extends JFrame{
 
 	private Panel pan = new Panel();
+	private JPanel motherPane = new JPanel();
+	private JButton button = new JButton("Nice Button");
 	
 	public Window() {
 		this.setTitle("Interesting window");
 		this.setSize(300, 300);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setContentPane(pan);
+		motherPane.setBackground(Color.WHITE);
+		motherPane.setLayout(new BorderLayout());
+		motherPane.add(button, BorderLayout.SOUTH);
+		motherPane.add(pan, BorderLayout.CENTER);
+		this.setContentPane(motherPane);
 		this.setVisible(true);
 		Go();
 	}
@@ -58,7 +66,7 @@ public class Window extends JFrame{
 			//We re-draw our panel
 			pan.repaint();
 			
-			//And we don't forget to slow the process downS
+			//And we don't forget to slow the process down
 			try {
 				Thread.sleep(3);
 			} 
