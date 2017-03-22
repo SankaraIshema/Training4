@@ -9,7 +9,7 @@ public class Window extends JFrame{
 
 	private Panel pan = new Panel();
 	private JPanel motherPane = new JPanel();
-	private JButton button = new JButton("Nice Button");
+	private Button button = new Button("Nice Button");
 	
 	public Window() {
 		this.setTitle("Interesting window");

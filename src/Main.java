@@ -1,3 +1,6 @@
+import java.awt.BorderLayout;
+import java.util.Hashtable;
+
 import javax.swing.JFrame;;
 
 public class Main {
