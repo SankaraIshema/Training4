@@ -11,13 +11,14 @@ import javax.swing.JPanel;
 
 public class Window extends JFrame {
 
-	private Panel pan = new Panel();
+	private Panel pan         = new Panel();
 	private JPanel motherPane = new JPanel();
 	private JPanel buttonPane = new JPanel();
-	private JButton button1 = new JButton("Go");
-	private JButton button2 = new JButton("Stop");
-	private JLabel label = new JLabel("Nice Label");
+	private JButton button1   = new JButton("Go");
+	private JButton button2   = new JButton("Stop");
+	private JLabel label      = new JLabel("Nice Label");
 	private boolean greenLight = true;
+	private Thread threadGo;
 	
 	public Window() {
 		
@@ -56,7 +57,7 @@ public class Window extends JFrame {
 		button1.addActionListener(new ButtonListener1());
 		button2.addActionListener(new ButtonListener2());
 		
-		/* Since the red ball will launch itself automatically at instanciation
+		/* Since the red ball will launch itself automatically at instantiation
 		 * of a Window object, we want the Go button to be disabled
 		 * while the button Stop is.
 		 */
@@ -75,10 +76,10 @@ public class Window extends JFrame {
 		/* And we don't forget to launch the Go() method 
 		 * developed just below
 		 */
-		Go();
+		go();
 	}
 	
-	private void Go() {
+		private void go() {
 		//Starting position of our red ball
 		int x = pan.getPosX();
 		int y = pan.getPosY();		
@@ -88,7 +89,7 @@ public class Window extends JFrame {
 		Boolean backY = true;
 		
 		// As long as greenLight is true, the infinite loop will never stop
-		while(this.greenLight) {
+		while(greenLight) {
 			
 			/* When the ball is going forward backX is true 
 			 * When the ball is going backward backX is false */
@@ -148,14 +149,18 @@ public class Window extends JFrame {
 			button1.setEnabled(false);
 			button2.setEnabled(true);
 			
-			// And we kick-start the Go() method again
-			Go();
+			/* And we kick-start the Go() method again 
+			 * by using a new Thread each time we push the Go button.
+			 * For this we use a custom made thread that will take upon itself
+			 * to launch the go() method. This thread is defined below.
+			 */
+			threadGo = new Thread(new CustomRunnable());
+			threadGo.start();
 		}	
 	}
 	
 	// The class that listen to our Stop button (button2) and implements ActionListener
 	class ButtonListener2 implements ActionListener {
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
@@ -168,6 +173,18 @@ public class Window extends JFrame {
 			button1.setEnabled(true);
 			button2.setEnabled(false);
 				
+		}
+	}
+	
+	// Our custom made Thread class that implements Runnable.
+	class CustomRunnable implements Runnable {
+		
+		/* By implementing Runnable we have to override it's method run().
+		 * An opportunity we will take to launch the go() method.
+		 */
+		@Override
+		public void run() {
+			go();	
 		}
 	}
 }
