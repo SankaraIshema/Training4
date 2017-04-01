@@ -1,24 +1,30 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Window extends JFrame {
 
-	private Panel pan         = new Panel();
-	private JPanel motherPane = new JPanel();
-	private JPanel buttonPane = new JPanel();
-	private JButton button1   = new JButton("Go");
-	private JButton button2   = new JButton("Stop");
-	private JLabel label      = new JLabel("Nice Label");
+	private Panel pan           = new Panel();
+	private JPanel motherPane   = new JPanel();
+	private JPanel buttonPane   = new JPanel();
+	private JPanel topPane      = new JPanel();
+	private JButton button1     = new JButton("Go");
+	private JButton button2     = new JButton("Stop");
+	private JLabel label        = new JLabel("Form Options");
+	
 	private boolean greenLight = true;
 	private Thread threadGo;
+	private String[] optionsTab = {"Circle", "Square", "Triangle", "Star", };
+	private JComboBox<String> combo = new JComboBox<>(optionsTab);
 	
 	public Window() {
 		
@@ -41,12 +47,23 @@ public class Window extends JFrame {
 		buttonPane.add(button2);
 		motherPane.add(buttonPane, BorderLayout.SOUTH);
 		
-		// We set the parameters of our JLabel object and we add it to the mother panel
+		// We set up the parameters of our JLabel object and we add it to the top panel
 		Font policy = new Font("Tahoma", Font.BOLD, 16);
 		label.setFont(policy);
 		label.setForeground(Color.BLUE);
-		label.setHorizontalAlignment(JLabel.CENTER);
-		motherPane.add(label, BorderLayout.NORTH);
+		topPane.add(label);
+		
+		/* We set up our combo-box, add an ActionListner, add it to the top-pane
+		 * and and the whole shabbang to the mother-pane.
+		 */
+		combo.setForeground(Color.BLUE);
+		combo.setPreferredSize(new Dimension(100, 20));
+		combo.addActionListener(new FormListener());
+		topPane.add(combo);
+		
+		motherPane.add(topPane, BorderLayout.NORTH);
+		
+		
 		
 		/* We add ActionListener to our buttons.
 		 * Each button has a class designed for handling the specific action
@@ -187,4 +204,12 @@ public class Window extends JFrame {
 			go();	
 		}
 	}
+	
+	// Our Custom made ActionListener
+	class FormListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			pan.setForm(combo.getSelectedItem().toString());
+		}
+	}	
 }
