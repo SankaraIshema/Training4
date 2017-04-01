@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,13 +26,14 @@ public class Window extends JFrame {
 	private Thread threadGo;
 	private String[] optionsTab = {"Circle", "Square", "Triangle", "Star", };
 	private JComboBox<String> combo = new JComboBox<>(optionsTab);
+	private JCheckBox morphing      = new JCheckBox("Morphing");
 	
 	public Window() {
 		
 		
 		// We set the parameters of our window
 		this.setTitle("Interesting window");
-		this.setSize(300, 300);
+		this.setSize(500, 300);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -61,8 +63,10 @@ public class Window extends JFrame {
 		combo.addActionListener(new FormListener());
 		topPane.add(combo);
 		
-		motherPane.add(topPane, BorderLayout.NORTH);
+		morphing.addActionListener(new MorphListener());
+		topPane.add(morphing);
 		
+		motherPane.add(topPane, BorderLayout.NORTH);
 		
 		
 		/* We add ActionListener to our buttons.
@@ -107,15 +111,23 @@ public class Window extends JFrame {
 		
 		// As long as greenLight is true, the infinite loop will never stop
 		while(greenLight) {
-			
-			/* When the ball is going forward backX is true 
-			 * When the ball is going backward backX is false */
-			if(x < 1) backX = true;
-			if(x > pan.getWidth() - 50) backX = false;
-			
-			//Same for backY
-			if(y < 1) backY = true;
-			if(y > pan.getHeight() - 50) backY = false;
+			if(!pan.isMorph()) {
+				/* When the ball is going forward backX is true 
+				 * When the ball is going backward backX is false */
+				if(x < 1) backX = true;
+				if(x > pan.getWidth() - 50) backX = false;
+				
+				//Same for backY
+				if(y < 1) backY = true;
+				if(y > pan.getHeight() - 50) backY = false;
+			}
+			else {
+				if(x < 1) backX = true;
+				if(x > pan.getWidth() - pan.getDrawSize()) backX = false;
+				
+				if(y < 1) backY = true;
+				if(y > pan.getHeight() - pan.getDrawSize()) backY = false;
+			}
 			
 			/* When backX is true the ball is going forward
 			 * When backX is false the ball is going backward 
@@ -212,4 +224,16 @@ public class Window extends JFrame {
 			pan.setForm(combo.getSelectedItem().toString());
 		}
 	}	
+	
+	class MorphListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(morphing.isSelected()) {
+				pan.setMorph(true);
+			}
+			else {
+				pan.setMorph(false);
+			}
+		}	
+	}
 }

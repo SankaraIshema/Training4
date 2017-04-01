@@ -12,16 +12,29 @@ import javax.swing.JPanel;
 
 public class Panel extends JPanel {
 	
-	private int posX = -50;
-	private int posY = -50;
-	private String form = "Circle";
+	private int posX       = -50;
+	private int posY       = -50;
+	private int drawSize   = 50;
+	private int increment  = 0;
+	
+	private boolean morph  = false;
+	private boolean reduce = false;
+	
+	private String form    = "Circle";
+	
 	
 	public void paintComponent(Graphics graph) {
 		graph.setColor(Color.WHITE);
 		graph.fillRect(0, 0, this.getWidth(), this.getHeight());
 		
 		graph.setColor(Color.RED);
-		draw(graph);
+		
+		if(morph) {
+			drawMorph(graph);
+		}
+		else {
+			draw(graph);
+		}
 	}
 	
 	public void draw(Graphics graph) {
@@ -77,6 +90,93 @@ public class Panel extends JPanel {
 		}
 	}
 	
+	public void drawMorph(Graphics graph) {
+		increment++;
+		
+		if(drawSize >= 50) reduce = true;
+		if(drawSize <= 10) reduce = false;
+		
+		if(reduce) {
+			drawSize = drawSize - this.getReSizement();
+		}
+		else {
+			drawSize = drawSize + this.getReSizement();
+		}
+		
+		switch(form) {
+		case "Circle" :
+			graph.fillOval(posX, posY, drawSize, drawSize);
+			break;
+			
+		case "Square" :
+			graph.fillRect(posX, posY, drawSize, drawSize);
+			break;
+			
+		case "Triangle" :
+			int firstPointX  = posX + drawSize / 2;
+			int firstPointY  = posY;
+			
+			int secondPointX = posX + drawSize;
+			int secondPointY = posY + drawSize;
+			
+			int thirdPointX  = posX;
+			int thirdPointY  = posY + drawSize;
+			
+			int[] pointsX = {firstPointX, secondPointX, thirdPointX};
+			int[] pointsY = {firstPointY, secondPointY, thirdPointY};
+			
+			graph.fillPolygon(pointsX, pointsY, 3);
+			break;
+			
+		case "Star" :
+			  int s1X = posX + drawSize / 2;
+		      int s1Y = posY;
+		      
+		      int s2X = posX + drawSize;
+		      int s2Y = posY + drawSize; 
+		      
+		      graph.drawLine(s1X, s1Y, s2X, s2Y);  
+		      
+		      int s3X = posX;
+		      int s3Y = posY + drawSize / 3;
+		      
+		      graph.drawLine(s2X, s2Y, s3X, s3Y); 
+		      
+		      int s4X = posX + drawSize;
+		      int s4Y = posY + drawSize / 3;
+		      
+		      graph.drawLine(s3X, s3Y, s4X, s4Y);      
+		      
+		      int s5X = posX;
+		      int s5Y = posY + drawSize;
+		      
+		      graph.drawLine(s4X, s4Y, s5X, s5Y);       
+		      graph.drawLine(s5X, s5Y, s1X, s1Y); 
+		      break;
+		}
+	}
+	
+	public int getReSizement() {
+		int reSizement = 0; 
+		
+		if(increment / 10 == 1) {
+			reSizement = 1;
+			increment  = 0;
+		}
+		return reSizement;
+	}
+	
+	public int getDrawSize() {
+		return drawSize;
+	}
+
+	public boolean isMorph() {
+		return morph;
+	}
+
+	public void setMorph(boolean morph) {
+		this.morph = morph;
+	}
 
 	public void setForm(String form) {
 		this.form = form;
