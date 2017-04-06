@@ -19,15 +19,18 @@ public class Panel extends JPanel {
 	
 	private boolean morph  = false;
 	private boolean reduce = false;
+	private Color backgroundColor = Color.WHITE;
+	private Color objectColor = Color.RED;
 	
 	private String form    = "Circle";
 	
 	
 	public void paintComponent(Graphics graph) {
-		graph.setColor(Color.WHITE);
+		
+		graph.setColor(backgroundColor);
 		graph.fillRect(0, 0, this.getWidth(), this.getHeight());
 		
-		graph.setColor(Color.RED);
+		graph.setColor(objectColor);
 		
 		if(morph) {
 			drawMorph(graph);
@@ -37,6 +40,14 @@ public class Panel extends JPanel {
 		}
 	}
 	
+	public void setBackgroundColor(Color backgroundColor) {
+		this.backgroundColor = backgroundColor;
+	}
+
+	public void setObjectColor(Color objectColor) {
+		this.objectColor = objectColor;
+	}
+
 	public void draw(Graphics graph) {
 		switch(form) {
 		case "Circle" :
